@@ -1,36 +1,129 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AskTaaza - Interview Questions Platform
+
+A credibility-first platform for crowd-reported interview questions optimized for freshness and signal quality.
+
+## Features
+
+- **Question Submission**: Submit interview questions with comprehensive metadata (company, role, difficulty, tags, etc.)
+- **Google Authentication**: Required authentication via Google OAuth for question submissions
+- **Freshness-Based Ranking**: Questions are ranked using exponential decay algorithm prioritizing recent submissions
+- **Advanced Filtering**: Filter questions by company, role, difficulty, round type, and search terms
+- **Clean UI**: Minimal, modern interface built with Tailwind CSS
+
+## Tech Stack
+
+- **Next.js 16**: React framework with App Router
+- **TypeScript**: Type-safe development
+- **Drizzle ORM**: Type-safe database queries
+- **SQLite**: Lightweight database (easily upgradeable to PostgreSQL)
+- **NextAuth.js v5**: Authentication with Google OAuth
+- **Tailwind CSS**: Utility-first CSS framework
+- **Zod**: Runtime validation
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
+- Node.js 20+
+- npm or yarn
+- Google OAuth credentials (for authentication)
+
+### Installation
+
+1. Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd asktaaza
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies:
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Set up environment variables:
+Create a `.env.local` file in the root directory:
+```env
+# Database
+DATABASE_URL=./sqlite.db
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your-secret-key-change-in-production
 
-## Learn More
+# Google OAuth
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Set up the database:
+```bash
+npm run db:push
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Generate NextAuth secret (optional):
+```bash
+openssl rand -base64 32
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+6. Get Google OAuth credentials:
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Create a new project or select an existing one
+   - Enable Google+ API
+   - Create OAuth 2.0 credentials
+   - Add `http://localhost:3000/api/auth/callback/google` as an authorized redirect URI
 
-## Deploy on Vercel
+7. Run the development server:
+```bash
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+8. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Database Management
+
+- Generate migrations: `npm run db:generate`
+- Push schema changes: `npm run db:push`
+- Open Drizzle Studio: `npm run db:studio`
+
+## Project Structure
+
+```
+/
+├── app/
+│   ├── actions/          # Server actions
+│   ├── api/              # API routes
+│   ├── auth/             # Authentication pages
+│   ├── questions/        # Question detail pages
+│   ├── submit/           # Question submission page
+│   └── page.tsx          # Home page
+├── components/           # React components
+├── lib/                  # Utility functions
+│   ├── auth.ts          # NextAuth configuration
+│   ├── db.ts            # Database client
+│   ├── schema.ts        # Database schema
+│   ├── ranking.ts       # Ranking algorithm
+│   └── validation.ts    # Zod schemas
+└── types/               # TypeScript types
+```
+
+## Ranking Algorithm
+
+Questions are ranked using a freshness-based algorithm:
+
+- **Freshness Score**: `e^(-days_old / 30)` (exponential decay over 30 days)
+- **Quality Multiplier**: Questions with complete metadata get a 1.1x boost
+- **Final Score**: `freshness * quality_multiplier`
+
+Most recent questions appear first, with slight preference for well-documented submissions.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+MIT
