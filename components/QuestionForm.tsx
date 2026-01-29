@@ -21,6 +21,7 @@ export function QuestionForm() {
   const [rateLimitError, setRateLimitError] = useState<string | null>(null);
   const [showDuplicateDialog, setShowDuplicateDialog] = useState(false);
   const [pendingQuestions, setPendingQuestions] = useState<typeof questions | null>(null);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [formData, setFormData] = useState<Partial<QuestionSubmission>>({
     company: "",
     skill: "",
@@ -83,6 +84,12 @@ export function QuestionForm() {
         } else {
           setErrors({ general: "Please add at least one question with at least 10 characters." });
         }
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!agreedToTerms) {
+        setErrors({ general: "Please agree to our Terms and Conditions and Privacy Policy to submit." });
         setIsSubmitting(false);
         return;
       }
@@ -364,8 +371,29 @@ export function QuestionForm() {
             ))}
           </div>
 
+          {/* Terms agreement */}
+          <label className="flex items-start gap-3 cursor-pointer mt-4">
+            <input
+              type="checkbox"
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-[#334155] bg-[#0f172a] text-[#3b82f6] focus:ring-[#3b82f6]"
+            />
+            <span className="text-sm text-[#94a3b8]">
+              I agree to the{" "}
+              <Link href="/terms" target="_blank" className="text-[#3b82f6] hover:underline">
+                Terms and Conditions
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy" target="_blank" className="text-[#3b82f6] hover:underline">
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </label>
+
           {/* Buttons right after questions */}
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-3 mt-4">
             <button
               type="button"
               onClick={() => router.push("/")}
@@ -377,6 +405,7 @@ export function QuestionForm() {
               type="submit"
               disabled={
                 isSubmitting || 
+                !agreedToTerms ||
                 !questions[0]?.content.trim() || 
                 !isValidQuestion(questions[0]?.content || "") || 
                 !!rateLimitError ||
@@ -540,30 +569,52 @@ export function QuestionForm() {
         </div>
       )}
 
-      {/* Submit Button for Details tab */}
+      {/* Terms agreement + Submit Button for Details tab */}
       {activeTab === "details" && (
-        <div className="pt-3 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={() => router.push("/")}
-            className="rounded-full border border-[#334155] bg-[#1e293b] px-5 py-2 text-sm font-medium text-[#f1f5f9] hover:bg-[#334155] transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            disabled={
-              isSubmitting || 
-              !questions[0]?.content.trim() || 
-              !isValidQuestion(questions[0]?.content || "") || 
-              !!rateLimitError ||
-              showDuplicateDialog
-            }
-            className="rounded-full bg-[#3b82f6] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
-        </div>
+        <>
+          <label className="flex items-start gap-3 cursor-pointer mt-6 pt-4 border-t border-[#334155]">
+            <input
+              type="checkbox"
+              checked={agreedToTerms}
+              onChange={(e) => setAgreedToTerms(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-[#334155] bg-[#0f172a] text-[#3b82f6] focus:ring-[#3b82f6]"
+            />
+            <span className="text-sm text-[#94a3b8]">
+              I agree to the{" "}
+              <Link href="/terms" target="_blank" className="text-[#3b82f6] hover:underline">
+                Terms and Conditions
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy" target="_blank" className="text-[#3b82f6] hover:underline">
+                Privacy Policy
+              </Link>
+              .
+            </span>
+          </label>
+          <div className="pt-3 flex justify-end gap-3">
+            <button
+              type="button"
+              onClick={() => router.push("/")}
+              className="rounded-full border border-[#334155] bg-[#1e293b] px-5 py-2 text-sm font-medium text-[#f1f5f9] hover:bg-[#334155] transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={
+                isSubmitting || 
+                !agreedToTerms ||
+                !questions[0]?.content.trim() || 
+                !isValidQuestion(questions[0]?.content || "") || 
+                !!rateLimitError ||
+                showDuplicateDialog
+              }
+              className="rounded-full bg-[#3b82f6] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </button>
+          </div>
+        </>
       )}
     </form>
   );
