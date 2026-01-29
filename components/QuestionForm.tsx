@@ -365,11 +365,11 @@ export function QuestionForm() {
           </div>
 
           {/* Buttons right after questions */}
-          <div className="flex gap-3">
+          <div className="flex justify-end gap-3">
             <button
               type="button"
               onClick={() => router.push("/")}
-              className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-5 py-2.5 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
+              className="rounded-full border border-[#334155] bg-[#1e293b] px-5 py-2 text-sm font-medium text-[#f1f5f9] hover:bg-[#334155] transition-colors"
             >
               Cancel
             </button>
@@ -382,9 +382,9 @@ export function QuestionForm() {
                 !!rateLimitError ||
                 showDuplicateDialog
               }
-              className="flex-1 rounded-full bg-[#3b82f6] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="rounded-full bg-[#3b82f6] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
-              {isSubmitting ? "Submitting..." : "Submit Question"}
+              {isSubmitting ? "Submitting..." : "Submit"}
             </button>
           </div>
         </div>
@@ -542,11 +542,11 @@ export function QuestionForm() {
 
       {/* Submit Button for Details tab */}
       {activeTab === "details" && (
-        <div className="pt-3 flex gap-3">
+        <div className="pt-3 flex justify-end gap-3">
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-5 py-2.5 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
+            className="rounded-full border border-[#334155] bg-[#1e293b] px-5 py-2 text-sm font-medium text-[#f1f5f9] hover:bg-[#334155] transition-colors"
           >
             Cancel
           </button>
@@ -559,9 +559,9 @@ export function QuestionForm() {
               !!rateLimitError ||
               showDuplicateDialog
             }
-            className="flex-1 rounded-full bg-[#3b82f6] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="rounded-full bg-[#3b82f6] px-5 py-2 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
-            {isSubmitting ? "Submitting..." : "Submit Question"}
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
         </div>
       )}
