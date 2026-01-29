@@ -1,22 +1,28 @@
 "use server";
 
 import { db } from "@/lib/db";
-import { questions } from "@/lib/schema";
+import { questions, users } from "@/lib/schema";
 import { questionSubmissionSchema } from "@/lib/validation";
 import { auth } from "@/lib/auth";
 import { eq, and, desc, like, or, gte, sql, count } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import type { QuestionFilter } from "@/lib/validation";
 
+const ANONYMOUS_USER_EMAIL = "anonymous@asktaaza.local";
+
+async function getOrCreateAnonymousUserId(): Promise<string> {
+  const existing = await db.select().from(users).where(eq(users.email, ANONYMOUS_USER_EMAIL)).limit(1);
+  if (existing[0]) return existing[0].id;
+  const [inserted] = await db.insert(users).values({
+    name: "Anonymous",
+    email: ANONYMOUS_USER_EMAIL,
+  }).returning({ id: users.id });
+  return inserted.id;
+}
+
 export async function createQuestion(data: unknown) {
   const session = await auth();
-  
-  if (!session?.user?.id) {
-    return {
-      error: "You must be signed in to submit a question",
-      success: false,
-    };
-  }
+  const userId = session?.user?.id ?? await getOrCreateAnonymousUserId();
 
   const validation = questionSubmissionSchema.safeParse(data);
   
@@ -37,7 +43,7 @@ export async function createQuestion(data: unknown) {
       ...rest,
       round: rest.round || "other", // Default to "other" if not provided
       interviewDate: interviewDate,
-      userId: session.user.id,
+      userId,
     };
     
     // Handle legacy role column if it exists (for backward compatibility)

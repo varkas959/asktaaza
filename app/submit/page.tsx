@@ -1,15 +1,6 @@
-import { redirect } from "next/navigation";
-import { auth } from "@/lib/auth";
 import { QuestionForm } from "@/components/QuestionForm";
-import Link from "next/link";
 
-export default async function SubmitPage() {
-  const session = await auth();
-
-  if (!session?.user) {
-    redirect("/auth/signin?callbackUrl=/submit");
-  }
-
+export default function SubmitPage() {
   return (
     <div className="min-h-screen bg-[#0f172a]">
       <div className="mx-auto max-w-5xl px-4 py-8">

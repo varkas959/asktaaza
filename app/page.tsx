@@ -7,7 +7,6 @@ import { TrendingTopics } from "@/components/TrendingTopics";
 import { TopCompanies } from "@/components/TopCompanies";
 import { FilterPills } from "@/components/FilterPills";
 import { sortQuestionsByRank } from "@/lib/ranking";
-import { auth } from "@/lib/auth";
 import type { QuestionFilter } from "@/lib/validation";
 import type { Metadata } from "next";
 
@@ -62,7 +61,6 @@ interface HomePageProps {
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
-  const session = await auth();
 
   // Build filters from search params
   const filters: QuestionFilter = {
@@ -95,23 +93,23 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       {/* Sticky Navigation with Filters */}
       <StickyNav 
         showSubmitButton={true}
-        submitHref={session?.user ? "/submit" : "/auth/signin"}
+        submitHref="/submit"
       />
 
-      {/* Main Content Area - Two Column on xl; single column on mobile/tablet with main on top */}
+      {/* Main Content Area - Two columns from lg (1024px): sidebar left, main right; single column below that */}
       <div>
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col xl:flex-row gap-0">
-            {/* Sidebar: below main on mobile/tablet (order-2), left on xl (order-1) */}
-            <div className="order-2 xl:order-1 xl:w-64 xl:flex-shrink-0 xl:border-r xl:border-[#334155]">
+          <div className="flex flex-col lg:flex-row gap-0">
+            {/* Sidebar: below main on small screens (order-2), left on lg+ (order-1) */}
+            <div className="order-2 lg:order-1 lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[#334155]">
               <div className="sticky top-20 px-4 pt-4 pb-4">
                 <TrendingTopics />
                 <TopCompanies />
               </div>
             </div>
 
-            {/* Main Content: on top on mobile/tablet (order-1), right on xl (order-2) */}
-            <div className="flex-1 overflow-visible order-1 xl:order-2">
+            {/* Main Content: on top on small screens (order-1), right on lg+ (order-2) */}
+            <div className="flex-1 overflow-visible order-1 lg:order-2">
               {/* Filter Pills */}
               <div className="px-4 pt-4 pb-4 overflow-visible">
                 <FilterPills />
@@ -162,9 +160,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       </div>
 
       {/* Floating Submit Button - Mobile Only */}
-      <FloatingSubmitButton 
-        href={session?.user ? "/submit" : "/auth/signin"}
-      />
+      <FloatingSubmitButton href="/submit" />
     </div>
   );
 }

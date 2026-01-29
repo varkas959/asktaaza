@@ -17,6 +17,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchBarProps) {
   const [mounted, setMounted] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const searchParamsRef = useRef(searchParams);
+  const lastPushedQueryRef = useRef<string>(debouncedQuery.trim());
   searchParamsRef.current = searchParams;
 
   useEffect(() => setMounted(true), []);
@@ -30,14 +31,14 @@ export function SearchBar({ isMobile = false, onClose }: SearchBarProps) {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  // Sync URL -> state only when URL changed from outside (e.g. back button), not from our own push
+  // Sync URL -> state only when URL was changed from outside (e.g. back button), not by our own push
   useEffect(() => {
     const urlSearch = searchParams.get("search") ?? "";
-    if (urlSearch !== debouncedQuery) {
-      setSearchQuery(urlSearch);
-      setDebouncedQuery(urlSearch);
-    }
-  }, [searchParams, debouncedQuery]);
+    if (urlSearch === lastPushedQueryRef.current) return; // we caused this URL; don't overwrite state
+    lastPushedQueryRef.current = urlSearch;
+    setSearchQuery(urlSearch);
+    setDebouncedQuery(urlSearch);
+  }, [searchParams]);
 
   // Update URL when debounced query changes (do not depend on searchParams to avoid loop)
   useEffect(() => {
@@ -45,6 +46,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchBarProps) {
     const currentSearch = params.get("search") ?? "";
     const newSearch = debouncedQuery.trim();
     if (currentSearch === newSearch) return;
+    lastPushedQueryRef.current = newSearch;
     if (newSearch) params.set("search", newSearch);
     else params.delete("search");
     const queryString = params.toString();
