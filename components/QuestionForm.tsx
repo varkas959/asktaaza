@@ -369,7 +369,7 @@ export function QuestionForm() {
             <button
               type="button"
               onClick={() => router.push("/")}
-              className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-6 py-3 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
+              className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-5 py-2.5 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
             >
               Cancel
             </button>
@@ -382,7 +382,7 @@ export function QuestionForm() {
                 !!rateLimitError ||
                 showDuplicateDialog
               }
-              className="flex-1 rounded-full bg-[#3b82f6] px-6 py-3 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 rounded-full bg-[#3b82f6] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? "Submitting..." : "Submit Question"}
             </button>
@@ -404,7 +404,7 @@ export function QuestionForm() {
                   required
                   value={formData.company || ""}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pl-10 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
+                  className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pl-11 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] appearance-none"
                 >
                   <option value="">e.g. Google, Meta</option>
                   {companies.map((company) => (
@@ -414,8 +414,11 @@ export function QuestionForm() {
                   ))}
                   <option value="Other">Other</option>
                 </select>
-                <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94a3b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
               {formData.company === "Other" && (
@@ -442,15 +445,18 @@ export function QuestionForm() {
                   id="interviewDate"
                   value={formData.whenAsked || "Last 7 days"}
                   onChange={(e) => setFormData({ ...formData, whenAsked: e.target.value as any })}
-                  className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pl-10 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
+                  className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pl-11 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] appearance-none"
                 >
                   <option value="Last 7 days">Select timeframe</option>
                   <option value="Last 7 days">Last 7 days</option>
                   <option value="Last 30 days">Last 30 days</option>
                   <option value="Last 90 days">Last 90 days</option>
                 </select>
-                <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94a3b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </div>
@@ -480,7 +486,7 @@ export function QuestionForm() {
                   id="yearsExperience"
                   value={formData.experienceLevel || ""}
                   onChange={(e) => setFormData({ ...formData, experienceLevel: e.target.value as any })}
-                  className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pl-10 pr-10 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
+                  className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pl-11 pr-10 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] appearance-none"
                 >
                   <option value="">Your experience at time of interview</option>
                   {experienceLevels.map((level) => (
@@ -489,10 +495,10 @@ export function QuestionForm() {
                     </option>
                   ))}
                 </select>
-                <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94a3b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <svg className="absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#94a3b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -506,24 +512,29 @@ export function QuestionForm() {
             <label htmlFor="technology" className="mb-2 block text-sm font-medium text-[#f1f5f9]">
               Technology
             </label>
-            <select
-              id="technology"
-              value={formData.skill || ""}
-              onChange={(e) => setFormData({ ...formData, skill: e.target.value })}
-              className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
-            >
-              <option value="">Select technology</option>
-              <option value="Java">Java</option>
-              <option value="React">React</option>
-              <option value="Selenium">Selenium</option>
-              <option value="JavaScript">JavaScript</option>
-              <option value="Python">Python</option>
-              <option value="TypeScript">TypeScript</option>
-              <option value="Node.js">Node.js</option>
-              <option value="System Design">System Design</option>
-              <option value="Algorithms">Algorithms</option>
-              <option value="Data Structures">Data Structures</option>
-            </select>
+            <div className="relative">
+              <select
+                id="technology"
+                value={formData.skill || ""}
+                onChange={(e) => setFormData({ ...formData, skill: e.target.value })}
+                className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pr-10 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] appearance-none"
+              >
+                <option value="">Select technology</option>
+                <option value="Java">Java</option>
+                <option value="React">React</option>
+                <option value="Selenium">Selenium</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Python">Python</option>
+                <option value="TypeScript">TypeScript</option>
+                <option value="Node.js">Node.js</option>
+                <option value="System Design">System Design</option>
+                <option value="Algorithms">Algorithms</option>
+                <option value="Data Structures">Data Structures</option>
+              </select>
+              <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
           </div>
 
         </div>
@@ -535,7 +546,7 @@ export function QuestionForm() {
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-6 py-3 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
+            className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-5 py-2.5 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
           >
             Cancel
           </button>
@@ -548,7 +559,7 @@ export function QuestionForm() {
               !!rateLimitError ||
               showDuplicateDialog
             }
-            className="flex-1 rounded-full bg-[#3b82f6] px-6 py-3 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 rounded-full bg-[#3b82f6] px-5 py-2.5 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isSubmitting ? "Submitting..." : "Submit Question"}
           </button>

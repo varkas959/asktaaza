@@ -84,18 +84,47 @@ export function SearchBar({ isMobile = false, onClose }: SearchBarProps) {
     inputRef.current?.focus();
   };
 
+  // Handle search submit (when user presses Enter/Done on mobile keyboard)
+  const handleSearchSubmit = () => {
+    const trimmedQuery = searchQuery.trim();
+    const params = new URLSearchParams(searchParamsRef.current.toString());
+    
+    if (trimmedQuery) {
+      params.set("search", trimmedQuery);
+    } else {
+      params.delete("search");
+    }
+    
+    lastPushedQueryRef.current = trimmedQuery;
+    const queryString = params.toString();
+    router.push(queryString ? `/?${queryString}` : "/", { scroll: false });
+    
+    // Close the mobile overlay after search
+    if (onClose) {
+      onClose();
+    }
+  };
+
   if (isMobile && mounted) {
     const mobileOverlay = (
       <div className="fixed inset-0 z-[100] bg-[#0f172a]" style={{ touchAction: "manipulation" }}>
         <div className="flex h-full flex-col">
           {/* Mobile Search Header - Reddit style */}
-          <div className="flex items-center gap-2 px-2 py-2 border-b border-[#334155]">
+          <form 
+            className="flex items-center gap-2 px-2 py-2 border-b border-[#334155]"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearchSubmit();
+            }}
+          >
             {/* Back button */}
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                handleSearchSubmit();
+              }}
               className="flex-shrink-0 p-2 text-[#94a3b8] hover:text-[#f1f5f9] active:bg-[#334155] rounded-lg"
-              aria-label="Go back"
+              aria-label="Search and go back"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -111,6 +140,7 @@ export function SearchBar({ isMobile = false, onClose }: SearchBarProps) {
                 placeholder="Search..."
                 className="w-full rounded-full border border-[#3b82f6] bg-[#1e293b] px-4 py-2.5 pr-10 text-base text-[#f1f5f9] placeholder:text-[#64748b] focus:outline-none"
                 autoComplete="off"
+                enterKeyHint="search"
               />
               {/* Clear button inside input */}
               {searchQuery && (
@@ -126,12 +156,19 @@ export function SearchBar({ isMobile = false, onClose }: SearchBarProps) {
                 </button>
               )}
             </div>
-          </div>
-          {/* Search results area (empty for now, could show suggestions) */}
-          <div className="flex-1 px-4 py-4">
-            {searchQuery && (
+          </form>
+          {/* Tap anywhere to search and close */}
+          <div 
+            className="flex-1 px-4 py-4"
+            onClick={handleSearchSubmit}
+          >
+            {searchQuery ? (
               <p className="text-sm text-[#64748b]">
-                Searching for "{searchQuery}"...
+                Tap here or press search to find "{searchQuery}"
+              </p>
+            ) : (
+              <p className="text-sm text-[#64748b]">
+                Type to search for companies, technologies, or questions...
               </p>
             )}
           </div>
