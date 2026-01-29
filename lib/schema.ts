@@ -74,3 +74,16 @@ export const questions = sqliteTable("questions", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
 });
+
+// Feedback table (contact / bug report / feature suggestion)
+export const feedback = sqliteTable("feedback", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  category: text("category").notNull(), // bug | feature | question | general
+  content: text("content").notNull(),
+  meta: text("meta"), // JSON: stepsToReproduce, priority, category (for question), rating, etc.
+  email: text("email"),
+  deviceInfo: text("device_info"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
+});
