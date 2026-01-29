@@ -31,12 +31,13 @@ export function FilterBar() {
 
   // Check if any filters are active to determine if section should be open
   useEffect(() => {
-    const hasActiveFilters = 
+    const hasActiveFilters = Boolean(
       filters.company || 
       filters.experienceLevel || 
       filters.skill || 
       filters.round || 
-      (filters.freshness && filters.freshness !== "All time");
+      (filters.freshness && filters.freshness !== "All time")
+    );
     setIsOpen(hasActiveFilters);
   }, []);
 
