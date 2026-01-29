@@ -98,20 +98,20 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         submitHref={session?.user ? "/submit" : "/auth/signin"}
       />
 
-      {/* Main Content Area - Two Column Layout */}
+      {/* Main Content Area - Two Column on xl; single column on mobile/tablet with main on top */}
       <div>
         <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col lg:flex-row gap-0">
-            {/* Left Sidebar - Fixed width on large screens */}
-            <div className="order-2 lg:order-1 lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[#334155]">
+          <div className="flex flex-col xl:flex-row gap-0">
+            {/* Sidebar: below main on mobile/tablet (order-2), left on xl (order-1) */}
+            <div className="order-2 xl:order-1 xl:w-64 xl:flex-shrink-0 xl:border-r xl:border-[#334155]">
               <div className="sticky top-20 px-4 pt-4 pb-4">
                 <TrendingTopics />
                 <TopCompanies />
               </div>
             </div>
 
-            {/* Main Content - Fills remaining space */}
-            <div className="flex-1 overflow-visible order-1 lg:order-2">
+            {/* Main Content: on top on mobile/tablet (order-1), right on xl (order-2) */}
+            <div className="flex-1 overflow-visible order-1 xl:order-2">
               {/* Filter Pills */}
               <div className="px-4 pt-4 pb-4 overflow-visible">
                 <FilterPills />

@@ -47,16 +47,13 @@ export function StickyNav({ showSubmitButton = false, submitHref = "/auth/signin
                 </svg>
               </button>
               
-              {/* Submit button */}
+              {/* Submit button - hidden on mobile; use FloatingSubmitButton there instead */}
               {showSubmitButton && (
                 <Link
                   href={submitHref}
-                  className="flex items-center justify-center rounded-md bg-[#3b82f6] p-2 text-white hover:bg-[#2563eb] md:px-4 md:py-2"
+                  className="hidden md:flex items-center justify-center rounded-md bg-[#3b82f6] px-4 py-2 text-white hover:bg-[#2563eb]"
                 >
-                  <svg className="h-5 w-5 md:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  <span className="hidden text-sm font-medium md:inline">+ Post Question</span>
+                  <span className="text-sm font-medium">+ Post Question</span>
                 </Link>
               )}
             </div>

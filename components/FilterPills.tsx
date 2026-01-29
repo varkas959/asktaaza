@@ -26,25 +26,30 @@ export function FilterPills() {
     setMounted(true);
   }, []);
 
-  // Close dropdown when clicking outside
+  // Close dropdown when clicking/tapping outside (mousedown + touchstart for mobile)
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    const isOutside = (target: Node) =>
+      dropdownRef.current &&
+      !dropdownRef.current.contains(target) &&
+      !technologyButtonRef.current?.contains(target) &&
+      !companyButtonRef.current?.contains(target) &&
+      !roundButtonRef.current?.contains(target) &&
+      !experienceButtonRef.current?.contains(target);
+
+    const handleOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Node;
-      if (
-        dropdownRef.current && 
-        !dropdownRef.current.contains(target) &&
-        !technologyButtonRef.current?.contains(target) &&
-        !companyButtonRef.current?.contains(target) &&
-        !roundButtonRef.current?.contains(target) &&
-        !experienceButtonRef.current?.contains(target)
-      ) {
+      if (target && isOutside(target)) {
         setOpenDropdown(null);
       }
     };
 
     if (openDropdown) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      document.addEventListener("mousedown", handleOutside);
+      document.addEventListener("touchstart", handleOutside, { passive: true });
+      return () => {
+        document.removeEventListener("mousedown", handleOutside);
+        document.removeEventListener("touchstart", handleOutside);
+      };
     }
   }, [openDropdown]);
 
