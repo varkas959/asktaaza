@@ -47,6 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const companies = await getAllCompanies();
     for (const company of companies) {
+      if (!company) continue; // Skip null/undefined companies
       const companySlug = generateSlug(company);
       sitemap.push({
         url: `${baseUrl}/interview/company/${companySlug}`,
@@ -63,6 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const skills = await getAllSkills();
     for (const skill of skills) {
+      if (!skill) continue; // Skip null/undefined skills
       const skillSlug = generateSlug(skill);
       sitemap.push({
         url: `${baseUrl}/interview/skill/${skillSlug}`,
@@ -79,6 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const experienceLevels = await getAllExperienceLevels();
     for (const level of experienceLevels) {
+      if (!level) continue; // Skip null/undefined levels
       const experienceSlug = generateSlug(level);
       sitemap.push({
         url: `${baseUrl}/interview/experience/${experienceSlug}`,
