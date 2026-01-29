@@ -369,7 +369,7 @@ export function QuestionForm() {
             <button
               type="button"
               onClick={() => router.push("/")}
-              className="flex-1 rounded-md border border-[#334155] bg-[#0f172a] px-6 py-3 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
+              className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-6 py-3 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
             >
               Cancel
             </button>
@@ -382,7 +382,7 @@ export function QuestionForm() {
                 !!rateLimitError ||
                 showDuplicateDialog
               }
-              className="flex-1 rounded-md bg-[#3b82f6] px-6 py-3 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="flex-1 rounded-full bg-[#3b82f6] px-6 py-3 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isSubmitting ? "Submitting..." : "Submit Question"}
             </button>
@@ -535,7 +535,7 @@ export function QuestionForm() {
           <button
             type="button"
             onClick={() => router.push("/")}
-            className="flex-1 rounded-md border border-[#334155] bg-[#0f172a] px-6 py-3 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
+            className="flex-1 rounded-full border border-[#334155] bg-[#0f172a] px-6 py-3 text-sm font-medium text-[#f1f5f9] hover:bg-[#1e293b] transition-colors"
           >
             Cancel
           </button>
@@ -548,7 +548,7 @@ export function QuestionForm() {
               !!rateLimitError ||
               showDuplicateDialog
             }
-            className="flex-1 rounded-md bg-[#3b82f6] px-6 py-3 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="flex-1 rounded-full bg-[#3b82f6] px-6 py-3 text-sm font-semibold text-white hover:bg-[#2563eb] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {isSubmitting ? "Submitting..." : "Submit Question"}
           </button>
