@@ -3,8 +3,6 @@ import { getQuestions } from "@/app/actions/questions";
 import { QuestionCard } from "@/components/QuestionCard";
 import { StickyNav } from "@/components/StickyNav";
 import { FloatingSubmitButton } from "@/components/FloatingSubmitButton";
-import { TrendingTopics } from "@/components/TrendingTopics";
-import { TopCompanies } from "@/components/TopCompanies";
 import { FilterPills } from "@/components/FilterPills";
 import { sortQuestionsByRank } from "@/lib/ranking";
 import type { QuestionFilter } from "@/lib/validation";
@@ -96,66 +94,51 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         submitHref="/submit"
       />
 
-      {/* Main Content Area - Two columns from lg (1024px): sidebar left, main right; single column below that */}
-      <div>
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col lg:flex-row gap-0">
-            {/* Sidebar: below main on small screens (order-2), left on lg+ (order-1) */}
-            <div className="order-2 lg:order-1 lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[#334155]">
-              <div className="sticky top-20 px-4 pt-4 pb-4">
-                <TrendingTopics />
-                <TopCompanies />
-              </div>
+      {/* Main Content Area */}
+      <div className="mx-auto max-w-4xl">
+        {/* Filter Pills */}
+        <div className="px-4 pt-4 pb-4 overflow-visible">
+          <FilterPills />
+        </div>
+
+        {/* Page Header */}
+        <div className="px-4 mb-6 md:mb-8 flex items-center gap-3">
+          <svg className="h-5 w-5 text-[#94a3b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <h1 className="text-xl font-semibold text-[#f1f5f9] md:text-2xl">
+            Recent Interview Questions
+          </h1>
+        </div>
+
+        {/* Question Feed */}
+        <div className="px-4">
+          {rankedQuestions.length === 0 ? (
+            <div className="rounded-lg bg-[#1e293b] border border-[#334155] p-8 text-center md:p-12">
+              {params.search && params.search.trim() ? (
+                <div className="space-y-2">
+                  <p className="text-sm text-[#94a3b8] md:text-base">
+                    No results found for &quot;{params.search}&quot;
+                  </p>
+                  <p className="text-xs text-[#64748b] md:text-sm">
+                    Try different keywords or clear filters.
+                  </p>
+                </div>
+              ) : hasActiveFilters ? (
+                <p className="text-sm text-[#94a3b8] md:text-base">
+                  No recent questions match your filters. Try clearing filters or expanding the time range.
+                </p>
+              ) : (
+                <p className="text-sm text-[#94a3b8] md:text-base">No questions found. Be the first to submit one!</p>
+              )}
             </div>
-
-            {/* Main Content: on top on small screens (order-1), right on lg+ (order-2) */}
-            <div className="flex-1 overflow-visible order-1 lg:order-2">
-              {/* Filter Pills */}
-              <div className="px-4 pt-4 pb-4 overflow-visible">
-                <FilterPills />
-              </div>
-
-              {/* Page Header */}
-              <div className="px-4 mb-6 md:mb-8 flex items-center gap-3">
-                <svg className="h-5 w-5 text-[#94a3b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                <h1 className="text-xl font-semibold text-[#f1f5f9] md:text-2xl">
-                  Recent Interview Experiences
-                </h1>
-              </div>
-
-              {/* Question Feed */}
-              <div className="px-4">
-                {rankedQuestions.length === 0 ? (
-                  <div className="rounded-lg bg-[#1e293b] border border-[#334155] p-8 text-center md:p-12">
-                    {params.search && params.search.trim() ? (
-                      <div className="space-y-2">
-                        <p className="text-sm text-[#94a3b8] md:text-base">
-                          No results found for &quot;{params.search}&quot;
-                        </p>
-                        <p className="text-xs text-[#64748b] md:text-sm">
-                          Try different keywords or clear filters.
-                        </p>
-                      </div>
-                    ) : hasActiveFilters ? (
-                      <p className="text-sm text-[#94a3b8] md:text-base">
-                        No recent questions match your filters. Try clearing filters or expanding the time range.
-                      </p>
-                    ) : (
-                      <p className="text-sm text-[#94a3b8] md:text-base">No questions found. Be the first to submit one!</p>
-                    )}
-                  </div>
-                ) : (
-                  <div className="space-y-5">
-                    {rankedQuestions.map((question) => (
-                      <QuestionCard key={question.id} question={question} />
-                    ))}
-                  </div>
-                )}
-              </div>
+          ) : (
+            <div className="space-y-5">
+              {rankedQuestions.map((question) => (
+                <QuestionCard key={question.id} question={question} />
+              ))}
             </div>
-          </div>
+          )}
         </div>
       </div>
 

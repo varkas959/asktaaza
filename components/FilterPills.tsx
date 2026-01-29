@@ -17,8 +17,8 @@ export function FilterPills() {
   const [mounted, setMounted] = useState(false);
   const technologyButtonRef = useRef<HTMLButtonElement>(null);
   const companyButtonRef = useRef<HTMLButtonElement>(null);
-  const roundButtonRef = useRef<HTMLButtonElement>(null);
-  const experienceButtonRef = useRef<HTMLButtonElement>(null);
+  const freshnessButtonRef = useRef<HTMLButtonElement>(null);
+  const moreFiltersButtonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Mount check for portal
@@ -33,8 +33,8 @@ export function FilterPills() {
       !dropdownRef.current.contains(target) &&
       !technologyButtonRef.current?.contains(target) &&
       !companyButtonRef.current?.contains(target) &&
-      !roundButtonRef.current?.contains(target) &&
-      !experienceButtonRef.current?.contains(target);
+      !freshnessButtonRef.current?.contains(target) &&
+      !moreFiltersButtonRef.current?.contains(target);
 
     const handleOutside = (event: MouseEvent | TouchEvent) => {
       const target = event.target as Node;
@@ -55,6 +55,7 @@ export function FilterPills() {
 
   const currentSkill = searchParams.get("skill");
   const currentCompany = searchParams.get("company");
+  const currentFreshness = searchParams.get("freshness");
   const currentRound = searchParams.get("round");
   const currentExperience = searchParams.get("experienceLevel");
 
@@ -101,6 +102,13 @@ export function FilterPills() {
     { value: "8+ years", label: "8+ years" },
   ];
 
+  const freshnessOptions = [
+    { value: "Last 7 days", label: "Last 7 days" },
+    { value: "Last 30 days", label: "Last 30 days" },
+    { value: "Last 90 days", label: "Last 90 days" },
+    { value: "All time", label: "All time" },
+  ];
+
   const getRoundLabel = (value: string | null) => {
     if (!value) return "Round";
     const round = interviewRounds.find(r => r.value === value);
@@ -111,6 +119,14 @@ export function FilterPills() {
     if (!value) return "Experience";
     return value;
   };
+
+  const getFreshnessLabel = (value: string | null) => {
+    if (!value) return "Time range";
+    return value;
+  };
+
+  // Check if any "more filters" are active
+  const hasMoreFilters = currentRound || currentExperience;
 
   const handleDropdownToggle = (dropdown: string, buttonRef: React.RefObject<HTMLButtonElement | null>) => {
     if (openDropdown === dropdown) {
@@ -150,7 +166,7 @@ export function FilterPills() {
     setOpenDropdown(null);
   };
 
-  const isAllActive = !currentSkill && !currentCompany && !currentRound && !currentExperience;
+  const isAllActive = !currentSkill && !currentCompany && !currentRound && !currentExperience && !currentFreshness;
 
   const renderDropdown = (items: { value: string; label: string }[] | string[], filterKey: string) => {
     if (!mounted) return null;
@@ -188,9 +204,69 @@ export function FilterPills() {
     );
   };
 
+  // Render "More filters" dropdown with nested options
+  const renderMoreFiltersDropdown = () => {
+    if (!mounted) return null;
+    
+    return createPortal(
+      <div
+        ref={dropdownRef}
+        className="fixed w-64 rounded-lg bg-[#1e293b] border border-[#334155] shadow-2xl overflow-hidden"
+        style={{
+          top: dropdownPosition.top,
+          left: dropdownPosition.left,
+          zIndex: 99999,
+        }}
+      >
+        <div className="py-2 max-h-80 overflow-y-auto">
+          {/* Experience Level Section */}
+          <div className="px-4 py-2">
+            <p className="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-2">Experience Level</p>
+            {experienceLevels.map((item) => (
+              <button
+                key={item.value}
+                type="button"
+                onClick={() => updateFilter("experienceLevel", currentExperience === item.value ? null : item.value)}
+                className={`w-full px-3 py-2 text-left text-sm rounded transition-colors mb-1 ${
+                  currentExperience === item.value
+                    ? "bg-[#3b82f6] text-white"
+                    : "text-[#e2e8f0] hover:bg-[#334155]"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+          
+          <div className="border-t border-[#334155] my-2" />
+          
+          {/* Interview Round Section */}
+          <div className="px-4 py-2">
+            <p className="text-xs font-semibold text-[#94a3b8] uppercase tracking-wide mb-2">Interview Round</p>
+            {interviewRounds.map((item) => (
+              <button
+                key={item.value}
+                type="button"
+                onClick={() => updateFilter("round", currentRound === item.value ? null : item.value)}
+                className={`w-full px-3 py-2 text-left text-sm rounded transition-colors mb-1 ${
+                  currentRound === item.value
+                    ? "bg-[#3b82f6] text-white"
+                    : "text-[#e2e8f0] hover:bg-[#334155]"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>,
+      document.body
+    );
+  };
+
   return (
     <div className="flex flex-wrap items-center gap-2">
-      {/* All Experiences */}
+      {/* All */}
       <button
         type="button"
         onClick={clearAllFilters}
@@ -203,18 +279,18 @@ export function FilterPills() {
         All
       </button>
 
-      {/* Experience Level Dropdown */}
+      {/* Company Dropdown */}
       <button
-        ref={experienceButtonRef}
+        ref={companyButtonRef}
         type="button"
-        onClick={() => handleDropdownToggle("experience", experienceButtonRef)}
+        onClick={() => handleDropdownToggle("company", companyButtonRef)}
         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
-          currentExperience
+          currentCompany
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
         }`}
       >
-        {getExperienceLabel(currentExperience)}
+        {currentCompany || "Company"}
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -237,35 +313,40 @@ export function FilterPills() {
         </svg>
       </button>
 
-      {/* Company Dropdown */}
+      {/* Time Range Dropdown */}
       <button
-        ref={companyButtonRef}
+        ref={freshnessButtonRef}
         type="button"
-        onClick={() => handleDropdownToggle("company", companyButtonRef)}
+        onClick={() => handleDropdownToggle("freshness", freshnessButtonRef)}
         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
-          currentCompany
+          currentFreshness
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
         }`}
       >
-        {currentCompany || "Company"}
+        {getFreshnessLabel(currentFreshness)}
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
 
-      {/* Interview Round Dropdown */}
+      {/* More Filters Dropdown */}
       <button
-        ref={roundButtonRef}
+        ref={moreFiltersButtonRef}
         type="button"
-        onClick={() => handleDropdownToggle("round", roundButtonRef)}
+        onClick={() => handleDropdownToggle("moreFilters", moreFiltersButtonRef)}
         className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
-          currentRound
+          hasMoreFilters
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
         }`}
       >
-        {getRoundLabel(currentRound)}
+        More filters
+        {hasMoreFilters && (
+          <span className="ml-1 bg-white/20 rounded-full px-1.5 text-xs">
+            {(currentRound ? 1 : 0) + (currentExperience ? 1 : 0)}
+          </span>
+        )}
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
@@ -287,10 +368,10 @@ export function FilterPills() {
       )}
 
       {/* Dropdown Portals */}
-      {openDropdown === "experience" && renderDropdown(experienceLevels, "experienceLevel")}
       {openDropdown === "technology" && renderDropdown(technologies, "skill")}
       {openDropdown === "company" && renderDropdown(companies, "company")}
-      {openDropdown === "round" && renderDropdown(interviewRounds, "round")}
+      {openDropdown === "freshness" && renderDropdown(freshnessOptions, "freshness")}
+      {openDropdown === "moreFilters" && renderMoreFiltersDropdown()}
     </div>
   );
 }
