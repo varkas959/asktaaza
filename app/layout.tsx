@@ -18,6 +18,17 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AskTaaza - Interview Questions",
   description: "Recent interview questions based on candidate reports",
+  icons: {
+    icon: [
+      { url: "/logo.svg", type: "image/svg+xml" },
+    ],
+    apple: "/logo.svg",
+  },
+  openGraph: {
+    title: "AskTaaza - Interview Questions",
+    description: "Recent interview questions based on candidate reports",
+    images: ["/logo.png"],
+  },
 };
 
 export default function RootLayout({
