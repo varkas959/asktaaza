@@ -77,16 +77,20 @@ export async function getQuestions(filters?: QuestionFilter) {
 
     if (filters) {
       // Search query - searches across content, company, skill, and category
+      // Case-insensitive and matches each word separately for better results
       if (filters.search && filters.search.trim()) {
-        const searchTerm = `%${filters.search.trim()}%`;
-        conditions.push(
-          or(
-            like(questions.content, searchTerm),
-            like(questions.company, searchTerm),
-            like(questions.skill, searchTerm),
-            like(questions.category, searchTerm)
-          )!
-        );
+        const searchWords = filters.search.trim().toLowerCase().split(/\s+/).filter(w => w.length > 0);
+        for (const word of searchWords) {
+          const searchTerm = `%${word}%`;
+          conditions.push(
+            or(
+              sql`lower(${questions.content}) LIKE ${searchTerm}`,
+              sql`lower(${questions.company}) LIKE ${searchTerm}`,
+              sql`lower(${questions.skill}) LIKE ${searchTerm}`,
+              sql`lower(${questions.category}) LIKE ${searchTerm}`
+            )!
+          );
+        }
       }
 
       if (filters.company) {
