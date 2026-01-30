@@ -3,8 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { QuestionFilter } from "@/lib/validation";
+import { getInterviewDetailOptions } from "@/app/actions/interview-details";
 import { Toast } from "./Toast";
 import { filterApplied } from "@/lib/analytics";
+
+const DEFAULT_COMPANIES = ["TCS", "Infosys", "Wipro", "HCL", "CTS", "Google", "Microsoft", "Amazon", "Apple", "Meta", "Netflix"];
+const DEFAULT_TECHNOLOGIES = ["Java", "React", "Selenium", "Playwright", "JavaScript", "Python", "TypeScript", "Node.js", "System Design", "Algorithms", "Data Structures"];
 
 interface FilterDrawerProps {
   isOpen: boolean;
@@ -40,6 +44,13 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
     round: roundValue,
     freshness: freshnessValue,
   });
+
+  const [companies, setCompanies] = useState<string[]>(DEFAULT_COMPANIES);
+  const [technologies, setTechnologies] = useState<string[]>(DEFAULT_TECHNOLOGIES);
+  useEffect(() => {
+    getInterviewDetailOptions("company").then((r) => { if (r.success && r.data && r.data.length > 0) setCompanies(r.data); });
+    getInterviewDetailOptions("technology").then((r) => { if (r.success && r.data && r.data.length > 0) setTechnologies(r.data); });
+  }, []);
 
   // Check if any filters are active
   const hasActiveFilters = 
@@ -222,17 +233,9 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
                   className="w-full rounded-md bg-[#0f172a] border border-[#334155] px-3 py-1.5 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
                 >
                   <option value="">All companies</option>
-                  <option value="TCS">TCS</option>
-                  <option value="Infosys">Infosys</option>
-                  <option value="Wipro">Wipro</option>
-                  <option value="HCL">HCL</option>
-                  <option value="CTS">CTS</option>
-                  <option value="Google">Google</option>
-                  <option value="Microsoft">Microsoft</option>
-                  <option value="Amazon">Amazon</option>
-                  <option value="Apple">Apple</option>
-                  <option value="Meta">Meta</option>
-                  <option value="Netflix">Netflix</option>
+                  {companies.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
                 </select>
               </div>
 
@@ -247,16 +250,9 @@ export function FilterDrawer({ isOpen, onClose }: FilterDrawerProps) {
                   className="w-full rounded-md bg-[#0f172a] border border-[#334155] px-3 py-1.5 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
                 >
                   <option value="">All skills</option>
-                  <option value="JavaScript">JavaScript</option>
-                  <option value="Python">Python</option>
-                  <option value="Java">Java</option>
-                  <option value="React">React</option>
-                  <option value="Selenium">Selenium</option>
-                  <option value="Playwright">Playwright</option>
-                  <option value="Node.js">Node.js</option>
-                  <option value="System Design">System Design</option>
-                  <option value="Algorithms">Algorithms</option>
-                  <option value="Data Structures">Data Structures</option>
+                  {technologies.map((t) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
                 </select>
               </div>
 

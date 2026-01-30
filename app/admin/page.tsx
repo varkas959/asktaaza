@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ModerationDashboard } from "@/components/ModerationDashboard";
+import { InterviewDetailsAdmin } from "@/components/InterviewDetailsAdmin";
 import { getAllQuestionsForAdmin } from "@/app/actions/questions";
 import { auth } from "@/lib/auth";
 
@@ -89,14 +90,20 @@ export default async function AdminPage() {
         </div>
       </nav>
 
-      <div className="mx-auto max-w-7xl px-4 py-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-[#f1f5f9]">Moderation Dashboard</h1>
-          <p className="mt-1 text-sm text-[#94a3b8]">
-            Review and moderate submitted interview questions ({questions.length} total)
-          </p>
-        </div>
-        <ModerationDashboard questions={questions} />
+      <div className="mx-auto max-w-7xl px-4 py-6 space-y-10">
+        <section>
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold text-[#f1f5f9]">Moderation Dashboard</h1>
+            <p className="mt-1 text-sm text-[#94a3b8]">
+              Review and moderate submitted interview questions ({questions.length} total)
+            </p>
+          </div>
+          <ModerationDashboard questions={questions} />
+        </section>
+
+        <section className="pt-8 border-t border-[#334155]">
+          <InterviewDetailsAdmin />
+        </section>
       </div>
     </div>
   );

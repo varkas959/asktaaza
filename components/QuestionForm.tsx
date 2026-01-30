@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, useEffect } from "react";
 import { createQuestion } from "@/app/actions/questions";
+import { getInterviewDetailOptions } from "@/app/actions/interview-details";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import type { QuestionSubmission } from "@/lib/validation";
@@ -32,7 +33,19 @@ export function QuestionForm() {
     source: "direct",
   });
 
-  const companies = ["TCS", "Infosys", "Wipro", "HCL", "CTS", "Google", "Microsoft", "Amazon", "Apple", "Meta", "Netflix"];
+  const DEFAULT_COMPANIES = ["TCS", "Infosys", "Wipro", "HCL", "CTS", "Google", "Microsoft", "Amazon", "Apple", "Meta", "Netflix"];
+  const DEFAULT_TECHNOLOGIES = ["Java", "React", "Selenium", "Playwright", "JavaScript", "Python", "TypeScript", "Node.js", "System Design", "Algorithms", "Data Structures"];
+  const [companies, setCompanies] = useState<string[]>(DEFAULT_COMPANIES);
+  const [technologies, setTechnologies] = useState<string[]>(DEFAULT_TECHNOLOGIES);
+
+  useEffect(() => {
+    getInterviewDetailOptions("company").then((r) => {
+      if (r.success && r.data && r.data.length > 0) setCompanies(r.data);
+    });
+    getInterviewDetailOptions("technology").then((r) => {
+      if (r.success && r.data && r.data.length > 0) setTechnologies(r.data);
+    });
+  }, []);
 
   const updateQuestion = (id: number, content: string) => {
     setQuestions(questions.map(q =>
@@ -564,17 +577,9 @@ export function QuestionForm() {
                 className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pr-10 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] appearance-none"
               >
                 <option value="">Select technology</option>
-                <option value="Java">Java</option>
-                <option value="React">React</option>
-                <option value="Selenium">Selenium</option>
-                <option value="Playwright">Playwright</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="Python">Python</option>
-                <option value="TypeScript">TypeScript</option>
-                <option value="Node.js">Node.js</option>
-                <option value="System Design">System Design</option>
-                <option value="Algorithms">Algorithms</option>
-                <option value="Data Structures">Data Structures</option>
+                {technologies.map((tech) => (
+                  <option key={tech} value={tech}>{tech}</option>
+                ))}
               </select>
               <svg className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94a3b8] pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

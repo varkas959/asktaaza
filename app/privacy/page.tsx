@@ -113,12 +113,8 @@ export default function PrivacyPage() {
 
           <Section id="contact-us" title="11. Contact Us">
             <p className="text-[#cbd5e1] mb-2">
-              <strong>Email</strong>: privacy@asktaaza.com<br />
-              <strong>Response Time</strong>: Within 48 hours<br />
-              <strong>General Inquiries</strong>: hello@asktaaza.com
-            </p>
-            <p className="text-[#cbd5e1] text-sm mt-4">
-              AskTaaza, India
+              <strong>General Inquiries</strong>: hello@asktaaza.com<br />
+              <strong>Response Time</strong>: Within 48 hours
             </p>
           </Section>
 

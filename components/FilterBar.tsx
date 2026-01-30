@@ -3,6 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { QuestionFilter } from "@/lib/validation";
+import { getInterviewDetailOptions } from "@/app/actions/interview-details";
+
+const DEFAULT_COMPANIES = ["TCS", "Infosys", "Wipro", "HCL", "CTS", "Google", "Microsoft", "Amazon", "Apple", "Meta", "Netflix"];
+const DEFAULT_TECHNOLOGIES = ["Java", "React", "Selenium", "Playwright", "JavaScript", "Python", "TypeScript", "Node.js", "System Design", "Algorithms", "Data Structures"];
 
 export function FilterBar() {
   const router = useRouter();
@@ -28,6 +32,13 @@ export function FilterBar() {
     round: roundValue,
     freshness: freshnessValue,
   });
+
+  const [companies, setCompanies] = useState<string[]>(DEFAULT_COMPANIES);
+  const [technologies, setTechnologies] = useState<string[]>(DEFAULT_TECHNOLOGIES);
+  useEffect(() => {
+    getInterviewDetailOptions("company").then((r) => { if (r.success && r.data && r.data.length > 0) setCompanies(r.data); });
+    getInterviewDetailOptions("technology").then((r) => { if (r.success && r.data && r.data.length > 0) setTechnologies(r.data); });
+  }, []);
 
   // Check if any filters are active to determine if section should be open
   useEffect(() => {
@@ -91,17 +102,9 @@ export function FilterBar() {
                 className="w-full rounded-md bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1"
               >
                 <option value="">All companies</option>
-                <option value="TCS">TCS</option>
-                <option value="Infosys">Infosys</option>
-                <option value="Wipro">Wipro</option>
-                <option value="HCL">HCL</option>
-                <option value="CTS">CTS</option>
-                <option value="Google">Google</option>
-                <option value="Microsoft">Microsoft</option>
-                <option value="Amazon">Amazon</option>
-                <option value="Apple">Apple</option>
-                <option value="Meta">Meta</option>
-                <option value="Netflix">Netflix</option>
+                {companies.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
               </select>
             </div>
 
@@ -116,16 +119,9 @@ export function FilterBar() {
                 className="w-full rounded-md bg-white px-3 py-2 text-sm text-gray-700 shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-1"
               >
                 <option value="">All skills</option>
-                <option value="JavaScript">JavaScript</option>
-                <option value="Python">Python</option>
-                <option value="Java">Java</option>
-                <option value="React">React</option>
-                <option value="Selenium">Selenium</option>
-                <option value="Playwright">Playwright</option>
-                <option value="Node.js">Node.js</option>
-                <option value="System Design">System Design</option>
-                <option value="Algorithms">Algorithms</option>
-                <option value="Data Structures">Data Structures</option>
+                {technologies.map((t) => (
+                  <option key={t} value={t}>{t}</option>
+                ))}
               </select>
             </div>
 

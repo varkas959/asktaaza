@@ -75,6 +75,17 @@ export const questions = sqliteTable("questions", {
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
 });
 
+// Interview detail options (companies, technologies) - manageable by admin
+export const interviewDetailOptions = sqliteTable("interview_detail_options", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  type: text("type").notNull(), // "company" | "technology"
+  value: text("value").notNull(),
+  sortOrder: integer("sort_order").default(0),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull().$defaultFn(() => new Date()),
+});
+
 // Feedback table (contact / bug report / feature suggestion)
 export const feedback = sqliteTable("feedback", {
   id: text("id")

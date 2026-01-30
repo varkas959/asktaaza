@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { getInterviewDetailOptions } from "@/app/actions/interview-details";
 
 interface DropdownPosition {
   top: number;
@@ -59,33 +60,24 @@ export function FilterPills() {
   const currentRound = searchParams.get("round");
   const currentExperience = searchParams.get("experienceLevel");
 
-  const technologies = [
-    "Java",
-    "React",
-    "Selenium",
-    "Playwright",
-    "JavaScript",
-    "Python",
-    "TypeScript",
-    "Node.js",
-    "System Design",
-    "Algorithms",
-    "Data Structures",
+  const DEFAULT_TECHNOLOGIES = [
+    "Java", "React", "Selenium", "Playwright", "JavaScript", "Python", "TypeScript",
+    "Node.js", "System Design", "Algorithms", "Data Structures",
   ];
+  const DEFAULT_COMPANIES = [
+    "Google", "Microsoft", "Amazon", "Apple", "Meta", "Netflix", "TCS", "Infosys", "Wipro", "HCL", "CTS",
+  ];
+  const [technologies, setTechnologies] = useState<string[]>(DEFAULT_TECHNOLOGIES);
+  const [companies, setCompanies] = useState<string[]>(DEFAULT_COMPANIES);
 
-  const companies = [
-    "Google",
-    "Microsoft",
-    "Amazon",
-    "Apple",
-    "Meta",
-    "Netflix",
-    "TCS",
-    "Infosys",
-    "Wipro",
-    "HCL",
-    "CTS",
-  ];
+  useEffect(() => {
+    getInterviewDetailOptions("technology").then((r) => {
+      if (r.success && r.data && r.data.length > 0) setTechnologies(r.data);
+    });
+    getInterviewDetailOptions("company").then((r) => {
+      if (r.success && r.data && r.data.length > 0) setCompanies(r.data);
+    });
+  }, []);
 
   const interviewRounds = [
     { value: "phone", label: "📞 Phone Screen" },
