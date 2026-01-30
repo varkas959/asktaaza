@@ -120,6 +120,8 @@ export function FilterBar() {
                 <option value="Python">Python</option>
                 <option value="Java">Java</option>
                 <option value="React">React</option>
+                <option value="Selenium">Selenium</option>
+                <option value="Playwright">Playwright</option>
                 <option value="Node.js">Node.js</option>
                 <option value="System Design">System Design</option>
                 <option value="Algorithms">Algorithms</option>

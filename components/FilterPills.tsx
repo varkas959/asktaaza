@@ -63,6 +63,7 @@ export function FilterPills() {
     "Java",
     "React",
     "Selenium",
+    "Playwright",
     "JavaScript",
     "Python",
     "TypeScript",

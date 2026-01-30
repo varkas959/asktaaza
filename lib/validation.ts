@@ -11,9 +11,8 @@ export const questionSubmissionSchema = z.object({
     .max(100, "Company name must be less than 100 characters"),
   skill: z
     .string()
-    .max(100, "Skill must be less than 100 characters")
-    .optional()
-    .nullable(),
+    .min(1, "Technology is required")
+    .max(100, "Skill must be less than 100 characters"),
   category: z
     .string()
     .max(100, "Category must be less than 100 characters")

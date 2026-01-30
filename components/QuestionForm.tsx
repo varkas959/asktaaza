@@ -94,7 +94,7 @@ export function QuestionForm() {
         return;
       }
 
-      // Validate required fields before duplicate check
+      // Validate required interview details before duplicate check
       if (!formData.company || formData.company === "") {
         setErrors({ general: "Please select or enter a company name." });
         setIsSubmitting(false);
@@ -103,6 +103,12 @@ export function QuestionForm() {
 
       if (formData.company === "Other" && (!companyOther || companyOther.trim() === "")) {
         setErrors({ general: "Please enter a company name." });
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (!formData.skill || formData.skill.trim() === "") {
+        setErrors({ general: "Please select a technology in Interview Details." });
         setIsSubmitting(false);
         return;
       }
@@ -408,6 +414,8 @@ export function QuestionForm() {
                 !agreedToTerms ||
                 !questions[0]?.content.trim() || 
                 !isValidQuestion(questions[0]?.content || "") || 
+                !formData.company ||
+                !formData.skill?.trim() ||
                 !!rateLimitError ||
                 showDuplicateDialog
               }
@@ -425,7 +433,7 @@ export function QuestionForm() {
           <div className="grid gap-4 md:grid-cols-2">
             <div>
               <label htmlFor="company" className="mb-2 block text-sm font-medium text-[#f1f5f9]">
-                Company Name
+                Company Name <span className="text-red-400">*</span>
               </label>
               <div className="relative">
                 <select
@@ -451,14 +459,20 @@ export function QuestionForm() {
                 </svg>
               </div>
               {formData.company === "Other" && (
-                <input
-                  type="text"
-                  required
-                  value={companyOther}
-                  onChange={(e) => setCompanyOther(e.target.value)}
-                  placeholder="Enter company name"
-                  className="mt-2 w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 text-sm text-[#f1f5f9] placeholder:text-[#64748b] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
-                />
+                <div className="mt-3">
+                  <label htmlFor="companyOther" className="mb-1.5 block text-sm font-medium text-[#f1f5f9]">
+                    Enter company name <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    id="companyOther"
+                    type="text"
+                    required
+                    value={companyOther}
+                    onChange={(e) => setCompanyOther(e.target.value)}
+                    placeholder="e.g. Your company, startup, or consulting firm"
+                    className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 text-sm text-[#f1f5f9] placeholder:text-[#64748b] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
+                  />
+                </div>
               )}
               {errors.company && (
                 <p className="mt-1 text-sm text-red-400">{errors.company}</p>
@@ -539,11 +553,12 @@ export function QuestionForm() {
 
           <div>
             <label htmlFor="technology" className="mb-2 block text-sm font-medium text-[#f1f5f9]">
-              Technology
+              Technology <span className="text-red-400">*</span>
             </label>
             <div className="relative">
               <select
                 id="technology"
+                required
                 value={formData.skill || ""}
                 onChange={(e) => setFormData({ ...formData, skill: e.target.value })}
                 className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 pr-10 text-sm text-[#f1f5f9] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6] appearance-none"
@@ -552,6 +567,7 @@ export function QuestionForm() {
                 <option value="Java">Java</option>
                 <option value="React">React</option>
                 <option value="Selenium">Selenium</option>
+                <option value="Playwright">Playwright</option>
                 <option value="JavaScript">JavaScript</option>
                 <option value="Python">Python</option>
                 <option value="TypeScript">TypeScript</option>
@@ -606,6 +622,8 @@ export function QuestionForm() {
                 !agreedToTerms ||
                 !questions[0]?.content.trim() || 
                 !isValidQuestion(questions[0]?.content || "") || 
+                !formData.company ||
+                !formData.skill?.trim() ||
                 !!rateLimitError ||
                 showDuplicateDialog
               }
