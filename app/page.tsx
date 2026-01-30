@@ -5,7 +5,6 @@ import { StickyNav } from "@/components/StickyNav";
 import { FloatingSubmitButton } from "@/components/FloatingSubmitButton";
 import { FilterPills } from "@/components/FilterPills";
 import { TrendingTopics } from "@/components/TrendingTopics";
-import { TopCompanies } from "@/components/TopCompanies";
 import { sortQuestionsByRank } from "@/lib/ranking";
 import type { QuestionFilter } from "@/lib/validation";
 import type { Metadata } from "next";
@@ -99,11 +98,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       {/* Main Content Area - Two columns on desktop: sidebar left, main right; single column on mobile */}
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-0">
-          {/* Sidebar: visible on desktop (lg+) only; on mobile use hamburger menu */}
+          {/* Sidebar: visible on desktop (lg+) only; mobile uses inline trending under filter pills */}
           <div className="hidden lg:block lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[#334155]">
             <div className="sticky top-20 px-4 pt-4 pb-4">
               <TrendingTopics />
-              <TopCompanies />
             </div>
           </div>
 
@@ -112,6 +110,11 @@ export default async function HomePage({ searchParams }: HomePageProps) {
             {/* Filter Pills */}
             <div className="px-4 pt-4 pb-4 overflow-visible">
               <FilterPills />
+            </div>
+
+            {/* Trending: horizontal scroll chips (mobile only; desktop uses sidebar) */}
+            <div className="lg:hidden px-4 -mt-2">
+              <TrendingTopics variant="inline" />
             </div>
 
             {/* Page Header */}

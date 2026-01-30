@@ -1,12 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { createPortal } from "react-dom";
 import { SearchBar } from "./SearchBar";
 import { FilterChips } from "./FilterChips";
-import { TrendingTopics } from "./TrendingTopics";
-import { TopCompanies } from "./TopCompanies";
 
 interface StickyNavProps {
   showSubmitButton?: boolean;
@@ -15,69 +12,14 @@ interface StickyNavProps {
 
 export function StickyNav({ showSubmitButton = false, submitHref = "/auth/signin" }: StickyNavProps) {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  // Lock body scroll when menu is open
-  useEffect(() => {
-    if (isMenuOpen && mounted) {
-      const prev = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => { document.body.style.overflow = prev; };
-    }
-  }, [isMenuOpen, mounted]);
-
-  const mobileMenu = isMenuOpen && mounted ? createPortal(
-    <div className="fixed inset-0 z-[100]" style={{ touchAction: "manipulation" }}>
-      {/* Backdrop */}
-      <div 
-        className="absolute inset-0 bg-black/60"
-        onClick={() => setIsMenuOpen(false)}
-      />
-      {/* Drawer */}
-      <div className="absolute top-0 left-0 bottom-0 w-72 bg-[#0f172a] border-r border-[#334155] overflow-y-auto">
-        <div className="flex items-center justify-between p-4 border-b border-[#334155]">
-          <span className="text-lg font-semibold text-[#f1f5f9]">Menu</span>
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(false)}
-            className="p-2 text-[#94a3b8] hover:text-[#f1f5f9] active:bg-[#334155] rounded-lg"
-            aria-label="Close menu"
-          >
-            <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div className="p-4">
-          <TrendingTopics />
-          <TopCompanies />
-        </div>
-      </div>
-    </div>,
-    document.body
-  ) : null;
 
   return (
     <>
       <nav className="sticky top-0 z-30 border-b border-[#334155] bg-[#0f172a] shadow-sm">
         <div className="px-4">
           <div className="flex items-center justify-between py-3 md:py-4">
-            {/* Left: Hamburger (mobile) + App name/logo */}
+            {/* Left: App name/logo */}
             <div className="flex items-center gap-2">
-              {/* Hamburger menu - mobile only */}
-              <button
-                type="button"
-                onClick={() => setIsMenuOpen(true)}
-                className="p-2 -ml-2 text-[#f1f5f9] hover:bg-[#334155] active:bg-[#475569] rounded-lg lg:hidden"
-                aria-label="Open menu"
-              >
-                <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
               <Link href="/" className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#2196F3] text-white">
                   <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -95,7 +37,7 @@ export function StickyNav({ showSubmitButton = false, submitHref = "/auth/signin
               </Link>
             </div>
 
-            {/* Center: Desktop Search */}
+            {/* Center: Search */}
             <div className="hidden md:block flex-1 max-w-xl mx-8">
               <SearchBar />
             </div>
@@ -130,9 +72,6 @@ export function StickyNav({ showSubmitButton = false, submitHref = "/auth/signin
           <FilterChips />
         </div>
       </nav>
-
-      {/* Mobile Menu Drawer */}
-      {mobileMenu}
 
       {/* Mobile Search Overlay */}
       {isSearchOpen && (
