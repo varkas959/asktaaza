@@ -87,6 +87,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
     (params.freshness && params.freshness !== "All time") ||
     (params.search && params.search.trim());
 
+  // Show trending only after 30+ questions (hide until enough content)
+  const showTrending = rankedQuestions.length >= 30;
+
   return (
     <div className="min-h-screen bg-[#0f172a]">
       {/* Sticky Navigation with Filters */}
@@ -98,12 +101,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       {/* Main Content Area - Two columns on desktop: sidebar left, main right; single column on mobile */}
       <div className="mx-auto max-w-7xl">
         <div className="flex flex-col lg:flex-row gap-0">
-          {/* Sidebar: visible on desktop (lg+) only; mobile uses inline trending under filter pills */}
-          <div className="hidden lg:block lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[#334155]">
-            <div className="sticky top-20 px-4 pt-4 pb-4">
-              <TrendingTopics />
+          {/* Sidebar: visible on desktop (lg+) only when 30+ questions */}
+          {showTrending && (
+            <div className="hidden lg:block lg:w-64 lg:flex-shrink-0 lg:border-r lg:border-[#334155]">
+              <div className="sticky top-20 px-4 pt-4 pb-4">
+                <TrendingTopics />
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Main content */}
           <div className="flex-1 min-w-0">
@@ -112,10 +117,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               <FilterPills />
             </div>
 
-            {/* Trending: horizontal scroll chips (mobile only; desktop uses sidebar) */}
-            <div className="lg:hidden px-4 -mt-2">
-              <TrendingTopics variant="inline" />
-            </div>
+            {/* Trending: horizontal scroll chips (mobile only when 30+ questions) */}
+            {showTrending && (
+              <div className="lg:hidden px-4 -mt-2">
+                <TrendingTopics variant="inline" />
+              </div>
+            )}
 
             {/* Page Header */}
             <div className="px-4 mb-6 md:mb-8 flex items-center gap-3">

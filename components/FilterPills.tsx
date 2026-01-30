@@ -265,12 +265,15 @@ export function FilterPills() {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div
+      className="flex items-center gap-2 overflow-x-auto overflow-y-hidden flex-nowrap scrollbar-none snap-x snap-mandatory pb-2 -mx-4 px-4 touch-pan-x scroll-pl-4"
+      style={{ WebkitOverflowScrolling: "touch" }}
+    >
       {/* All */}
       <button
         type="button"
         onClick={clearAllFilters}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
+        className={`flex-shrink-0 snap-start px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap ${
           isAllActive
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
@@ -284,7 +287,7 @@ export function FilterPills() {
         ref={companyButtonRef}
         type="button"
         onClick={() => handleDropdownToggle("company", companyButtonRef)}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
+        className={`flex-shrink-0 snap-start px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
           currentCompany
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
@@ -301,7 +304,7 @@ export function FilterPills() {
         ref={technologyButtonRef}
         type="button"
         onClick={() => handleDropdownToggle("technology", technologyButtonRef)}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
+        className={`flex-shrink-0 snap-start px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
           currentSkill
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
@@ -318,7 +321,7 @@ export function FilterPills() {
         ref={freshnessButtonRef}
         type="button"
         onClick={() => handleDropdownToggle("freshness", freshnessButtonRef)}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
+        className={`flex-shrink-0 snap-start px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
           currentFreshness
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
@@ -335,7 +338,7 @@ export function FilterPills() {
         ref={moreFiltersButtonRef}
         type="button"
         onClick={() => handleDropdownToggle("moreFilters", moreFiltersButtonRef)}
-        className={`px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
+        className={`flex-shrink-0 snap-start px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex items-center gap-1 ${
           hasMoreFilters
             ? "bg-[#3b82f6] text-white"
             : "bg-[#1e293b] border border-[#334155] text-[#e2e8f0] hover:bg-[#334155]"
@@ -357,7 +360,7 @@ export function FilterPills() {
         <button
           type="button"
           onClick={clearAllFilters}
-          className="px-3 py-2 rounded-full text-sm font-medium text-[#94a3b8] hover:text-[#f1f5f9] hover:bg-[#334155] transition-colors flex items-center gap-1"
+          className="flex-shrink-0 snap-start px-3 py-2 rounded-full text-sm font-medium text-[#94a3b8] hover:text-[#f1f5f9] hover:bg-[#334155] transition-colors flex items-center gap-1"
           title="Clear all filters"
         >
           <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
