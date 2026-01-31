@@ -526,9 +526,9 @@ export function QuestionForm() {
               <input
                 id="jobTitle"
                 type="text"
-                value={formData.experienceLevel || ""}
-                onChange={(e) => setFormData({ ...formData, experienceLevel: e.target.value as any })}
-                placeholder="e.g. Senior Frontend Engineer"
+                value={formData.category || ""}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                placeholder="e.g. Senior Frontend Engineer, Java Developer"
                 className="w-full rounded-lg bg-[#0f172a] border border-[#334155] px-4 py-2.5 text-sm text-[#f1f5f9] placeholder:text-[#64748b] focus:outline-none focus:ring-2 focus:ring-[#3b82f6] focus:border-[#3b82f6]"
               />
             </div>
