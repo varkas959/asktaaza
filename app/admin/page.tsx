@@ -2,7 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ModerationDashboard } from "@/components/ModerationDashboard";
 import { InterviewDetailsAdmin } from "@/components/InterviewDetailsAdmin";
+import { FeedbackListAdmin } from "@/components/FeedbackListAdmin";
 import { getAllQuestionsForAdmin } from "@/app/actions/questions";
+import { getAllFeedbackForAdmin } from "@/app/actions/feedback";
 import { auth } from "@/lib/auth";
 
 // Force dynamic rendering - no caching
@@ -66,6 +68,9 @@ export default async function AdminPage() {
   const result = await getAllQuestionsForAdmin();
   const questions = result.success && result.data ? result.data : [];
 
+  const feedbackResult = await getAllFeedbackForAdmin();
+  const feedback = feedbackResult.success && feedbackResult.data ? feedbackResult.data : [];
+
   return (
     <div className="min-h-screen bg-[#0f172a]">
       {/* Navigation */}
@@ -99,6 +104,16 @@ export default async function AdminPage() {
             </p>
           </div>
           <ModerationDashboard questions={questions} />
+        </section>
+
+        <section className="pt-8 border-t border-[#334155]">
+          <div className="mb-6">
+            <h2 className="text-lg font-bold text-[#f1f5f9] mb-1">User Feedback</h2>
+            <p className="text-sm text-[#94a3b8]">
+              Feedback and contact form submissions ({feedback.length} total)
+            </p>
+          </div>
+          <FeedbackListAdmin feedback={feedback} />
         </section>
 
         <section className="pt-8 border-t border-[#334155]">

@@ -2,6 +2,8 @@
 
 import { db } from "@/lib/db";
 import { feedback as feedbackTable } from "@/lib/schema";
+import { auth } from "@/lib/auth";
+import { desc } from "drizzle-orm";
 
 export type FeedbackCategory = "bug" | "feature" | "question" | "general";
 
@@ -47,5 +49,58 @@ export async function submitFeedback(input: SubmitFeedbackInput): Promise<{ succ
   } catch (e) {
     console.error("Feedback submit error:", e);
     return { success: false, error: "Something went wrong. Please try again." };
+  }
+}
+
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+async function isAdmin(): Promise<boolean> {
+  const session = await auth();
+  if (!session?.user?.email) return false;
+  if (ADMIN_EMAILS.length === 0) return false;
+  return ADMIN_EMAILS.includes(session.user.email.toLowerCase());
+}
+
+export type FeedbackRow = {
+  id: string;
+  category: string;
+  content: string;
+  meta: string | null;
+  email: string | null;
+  deviceInfo: string | null;
+  createdAt: Date | null;
+};
+
+export async function getAllFeedbackForAdmin(): Promise<{
+  success: boolean;
+  data?: FeedbackRow[];
+  error?: string;
+}> {
+  if (!(await isAdmin())) {
+    return { success: false, data: [], error: "Unauthorized" };
+  }
+  try {
+    const rows = await db
+      .select()
+      .from(feedbackTable)
+      .orderBy(desc(feedbackTable.createdAt));
+    return {
+      success: true,
+      data: rows.map((r) => ({
+        id: r.id,
+        category: r.category,
+        content: r.content,
+        meta: r.meta,
+        email: r.email,
+        deviceInfo: r.deviceInfo,
+        createdAt: r.createdAt,
+      })),
+    };
+  } catch (e) {
+    console.error("getAllFeedbackForAdmin error:", e);
+    return { success: false, data: [], error: "Failed to load feedback." };
   }
 }
