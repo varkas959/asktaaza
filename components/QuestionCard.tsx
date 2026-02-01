@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import type { Question } from "@/types";
 import { formatDistanceToNow } from "date-fns";
@@ -17,7 +16,6 @@ interface QuestionCardProps {
 }
 
 export function QuestionCard({ question }: QuestionCardProps) {
-  const [expanded, setExpanded] = useState(false);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
 
@@ -26,8 +24,7 @@ export function QuestionCard({ question }: QuestionCardProps) {
     : "";
 
   const questions = formatQuestions(question.content);
-  const hasMore = questions.length > PREVIEW_COUNT;
-  const displayQuestions = expanded ? questions : questions.slice(0, PREVIEW_COUNT);
+  const displayQuestions = questions.slice(0, PREVIEW_COUNT);
 
   // Generate tags from skill, category, and round
   const roundLabels: Record<string, string> = {
@@ -81,7 +78,7 @@ export function QuestionCard({ question }: QuestionCardProps) {
         <span className="text-xs text-[#64748b]">{timeAgo}</span>
       </div>
 
-      {/* Questions: show 2-3 initially, expand to show all */}
+      {/* Questions: show first 2-3; full list via link on the right */}
       <div className="mb-3">
         <ol className="space-y-1.5">
           {displayQuestions.map((q, index) => (
@@ -100,15 +97,6 @@ export function QuestionCard({ question }: QuestionCardProps) {
             </li>
           ))}
         </ol>
-        {hasMore && !expanded && (
-          <button
-            type="button"
-            onClick={() => setExpanded(true)}
-            className="mt-2 text-xs text-[#3b82f6] hover:text-[#60a5fa] font-medium"
-          >
-            View full questions ({questions.length} total)
-          </button>
-        )}
       </div>
 
       {/* Tags and Link */}

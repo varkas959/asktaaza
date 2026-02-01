@@ -52,10 +52,6 @@ export default async function QuestionDetailPage({ params }: QuestionDetailPageP
     ? formatDistanceToNow(new Date(question.createdAt), { addSuffix: true })
     : "";
   
-  const hoursAgo = question.createdAt
-    ? Math.floor((Date.now() - new Date(question.createdAt).getTime()) / (1000 * 60 * 60))
-    : 0;
-
   const roundLabels: Record<string, string> = {
     phone: "Phone Screen",
     onsite: "Onsite",
@@ -188,12 +184,6 @@ export default async function QuestionDetailPage({ params }: QuestionDetailPageP
               </span>
               <span>•</span>
               <span>Posted {timeAgo}</span>
-              {hoursAgo < 24 && (
-                <>
-                  <span>•</span>
-                  <span className="font-medium text-green-600">Asked {hoursAgo} hour{hoursAgo !== 1 ? "s" : ""} ago</span>
-                </>
-              )}
               {question.updatedAt && question.updatedAt !== question.createdAt && (
                 <>
                   <span>•</span>
