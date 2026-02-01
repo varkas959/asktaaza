@@ -1,18 +1,23 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import type { Question } from "@/types";
 import { formatDistanceToNow } from "date-fns";
 import { generateSlug } from "@/lib/seo-utils";
 import { questionView } from "@/lib/analytics";
 import { highlightKeywords } from "@/lib/search-utils";
+import { formatQuestions } from "@/lib/question-format";
 import { useSearchParams } from "next/navigation";
+
+const PREVIEW_COUNT = 3;
 
 interface QuestionCardProps {
   question: Question;
 }
 
 export function QuestionCard({ question }: QuestionCardProps) {
+  const [expanded, setExpanded] = useState(false);
   const searchParams = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
 
@@ -20,16 +25,9 @@ export function QuestionCard({ question }: QuestionCardProps) {
     ? formatDistanceToNow(new Date(question.createdAt), { addSuffix: true })
     : "";
 
-  // Format question content - split by newlines or numbers to create a list
-  const formatQuestions = (content: string) => {
-    const lines = content.split(/\n+/).filter(line => line.trim().length > 0);
-    if (lines.length > 1) {
-      return lines.map(line => line.trim().replace(/^\d+\.\s*/, ""));
-    }
-    return [content.trim()];
-  };
-
   const questions = formatQuestions(question.content);
+  const hasMore = questions.length > PREVIEW_COUNT;
+  const displayQuestions = expanded ? questions : questions.slice(0, PREVIEW_COUNT);
 
   // Generate tags from skill, category, and round
   const roundLabels: Record<string, string> = {
@@ -83,10 +81,10 @@ export function QuestionCard({ question }: QuestionCardProps) {
         <span className="text-xs text-[#64748b]">{timeAgo}</span>
       </div>
 
-      {/* Questions */}
+      {/* Questions: show 2-3 initially, expand to show all */}
       <div className="mb-3">
         <ol className="space-y-1.5">
-          {questions.map((q, index) => (
+          {displayQuestions.map((q, index) => (
             <li
               key={index}
               className="text-sm text-[#e2e8f0] leading-relaxed flex gap-2"
@@ -102,6 +100,15 @@ export function QuestionCard({ question }: QuestionCardProps) {
             </li>
           ))}
         </ol>
+        {hasMore && !expanded && (
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="mt-2 text-xs text-[#3b82f6] hover:text-[#60a5fa] font-medium"
+          >
+            View full questions ({questions.length} total)
+          </button>
+        )}
       </div>
 
       {/* Tags and Link */}

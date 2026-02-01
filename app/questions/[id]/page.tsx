@@ -4,6 +4,7 @@ import { formatDistanceToNow, format } from "date-fns";
 import Link from "next/link";
 import { ShareQuestion } from "@/components/ShareQuestion";
 import { generateSlug } from "@/lib/seo-utils";
+import { formatQuestions } from "@/lib/question-format";
 import type { Question } from "@/types";
 import type { Metadata } from "next";
 
@@ -147,8 +148,14 @@ export default async function QuestionDetailPage({ params }: QuestionDetailPageP
           </div>
 
           <div className="mb-6">
-            <h1 className="mb-4 text-2xl font-bold text-gray-900">{question.content}</h1>
-            
+            <ol className="mb-4 list-decimal list-inside space-y-2 text-gray-900">
+              {formatQuestions(question.content).map((q, i) => (
+                <li key={i} className="text-base leading-relaxed">
+                  {q}
+                </li>
+              ))}
+            </ol>
+
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
               {question.round && (
                 <>

@@ -4,6 +4,7 @@ import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { ShareQuestion } from "@/components/ShareQuestion";
 import { generateSlug } from "@/lib/seo-utils";
+import { formatQuestions } from "@/lib/question-format";
 import type { Question } from "@/types";
 import type { Metadata } from "next";
 
@@ -158,12 +159,20 @@ export default async function QuestionSlugPage({ params }: QuestionPageProps) {
             </div>
           </div>
 
-          {/* Question Content */}
+          {/* Question Content - numbered list like homepage */}
           <div className="rounded-lg border border-[#334155] bg-[#1e293b] p-6">
-            <h1 className="mb-4 text-xl font-semibold text-[#f1f5f9] leading-relaxed">
-              {question.content}
-            </h1>
-            
+            <ol className="mb-4 space-y-1.5">
+              {formatQuestions(question.content).map((q, i) => (
+                <li
+                  key={i}
+                  className="text-sm text-[#e2e8f0] leading-relaxed flex gap-2"
+                >
+                  <span className="text-[#64748b] flex-shrink-0">{i + 1}.</span>
+                  <span>{q}</span>
+                </li>
+              ))}
+            </ol>
+
             <div className="flex flex-wrap items-center gap-3 text-sm text-[#94a3b8] mb-4">
               {question.round && (
                 <span className="px-2.5 py-1 rounded bg-[#334155] text-xs">
