@@ -18,6 +18,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AskTaaza - Interview Questions",
   description: "Recent interview questions based on candidate reports",
+  verification: {
+    google: "C8TiqTYaoTFBTG-LG9WI5_6Bl0q-_YdXP1mnpxlkuiw",
+  },
   icons: {
     icon: [
       { url: "/logo.svg", type: "image/svg+xml" },

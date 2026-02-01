@@ -7,12 +7,6 @@ export const metadata: Metadata = {
   description: "Share your feedback, report bugs, suggest features, or ask questions. We'd love to hear from you.",
 };
 
-const QUICK_STATS = [
-  { icon: "⚡", text: "Average response time: < 24 hours" },
-  { icon: "💬", text: "500+ pieces of feedback received" },
-  { icon: "✅", text: "85% of suggestions implemented" },
-];
-
 const FAQ_ITEMS = [
   {
     q: "How do I delete my submission?",
@@ -62,21 +56,6 @@ export default function FeedbackPage() {
           <p className="text-[#cbd5e1] max-w-xl mx-auto">
             Your feedback shapes AskTaaza. Whether it&apos;s a bug, idea, or just a hello—we&apos;re listening.
           </p>
-        </section>
-
-        {/* Quick Stats */}
-        <section className="mb-10">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {QUICK_STATS.map((stat, i) => (
-              <div
-                key={i}
-                className="rounded-lg border border-[#334155] bg-[#1e293b] px-4 py-3 text-center"
-              >
-                <span className="text-lg mr-1">{stat.icon}</span>
-                <span className="text-sm text-[#cbd5e1]">{stat.text}</span>
-              </div>
-            ))}
-          </div>
         </section>
 
         {/* Feedback categories form */}

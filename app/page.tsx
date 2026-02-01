@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { getQuestions } from "@/app/actions/questions";
-import { QuestionCard } from "@/components/QuestionCard";
+import { QuestionFeedWithExpand } from "@/components/QuestionFeedWithExpand";
 import { StickyNav } from "@/components/StickyNav";
 import { FloatingSubmitButton } from "@/components/FloatingSubmitButton";
 import { FilterPills } from "@/components/FilterPills";
@@ -136,32 +136,29 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
             {/* Question Feed */}
             <div className="px-4">
-              {rankedQuestions.length === 0 ? (
-                <div className="rounded-lg bg-[#1e293b] border border-[#334155] p-8 text-center md:p-12">
-                  {params.search && params.search.trim() ? (
-                    <div className="space-y-2">
+              <QuestionFeedWithExpand
+                questions={rankedQuestions}
+                emptyState={
+                  <div className="rounded-lg bg-[#1e293b] border border-[#334155] p-8 text-center md:p-12">
+                    {params.search && params.search.trim() ? (
+                      <div className="space-y-2">
+                        <p className="text-sm text-[#94a3b8] md:text-base">
+                          No results found for &quot;{params.search}&quot;
+                        </p>
+                        <p className="text-xs text-[#64748b] md:text-sm">
+                          Try different keywords or clear filters.
+                        </p>
+                      </div>
+                    ) : hasActiveFilters ? (
                       <p className="text-sm text-[#94a3b8] md:text-base">
-                        No results found for &quot;{params.search}&quot;
+                        No recent questions match your filters. Try clearing filters or expanding the time range.
                       </p>
-                      <p className="text-xs text-[#64748b] md:text-sm">
-                        Try different keywords or clear filters.
-                      </p>
-                    </div>
-                  ) : hasActiveFilters ? (
-                    <p className="text-sm text-[#94a3b8] md:text-base">
-                      No recent questions match your filters. Try clearing filters or expanding the time range.
-                    </p>
-                  ) : (
-                    <p className="text-sm text-[#94a3b8] md:text-base">No questions found. Be the first to submit one!</p>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-5">
-                  {rankedQuestions.map((question) => (
-                    <QuestionCard key={question.id} question={question} />
-                  ))}
-                </div>
-              )}
+                    ) : (
+                      <p className="text-sm text-[#94a3b8] md:text-base">No questions found. Be the first to submit one!</p>
+                    )}
+                  </div>
+                }
+              />
             </div>
           </div>
         </div>
